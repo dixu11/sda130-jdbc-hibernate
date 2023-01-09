@@ -5,9 +5,18 @@ import java.util.Scanner;
 //menu
 public class Menu {
 
+   private boolean running = true;
 
-    //metoda powinna operować na jednym poziomie abstrakcji
-    public  void startMenu() {
+
+
+    public void startMenu() {
+
+        do{
+            menuAction();
+        }while (running);
+    }
+
+    private   void menuAction() {
         showOptions();
         int input = readDecision();
         executeOption(input);
@@ -36,17 +45,11 @@ public class Menu {
                 break;
             case 3:
                 System.out.println("Koniec");
+                running = false;
                 break;
         }
     }
 
 
-
-
-
-
-
-
-
-
+    //każda metoda powinna operować na jednym poziomie abstrakcji
 }
