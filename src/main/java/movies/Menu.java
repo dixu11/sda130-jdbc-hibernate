@@ -79,7 +79,7 @@ public class Menu {
         }
     }
 
-    public void save(Movie movie) {
+    private void save(Movie movie) {
         movies.add(movie);
     }
 
