@@ -7,10 +7,8 @@ package movies;
 //rozruch
 public class MoviesApp {
     public static void main(String[] args) {
-
       //Menu.startMenu(); - tak gdyby metoda była statyczna
         Menu menu = new Menu();
         menu.startMenu();
-
     }
 }

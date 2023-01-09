@@ -1,22 +1,21 @@
 package movies;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 //menu
 public class Menu {
-
-   private boolean running = true;
-
-
+    private boolean running = true;
+    private List<Movie> movies = new ArrayList<>();
 
     public void startMenu() {
-
-        do{
+        do {
             menuAction();
-        }while (running);
+        } while (running);
     }
 
-    private   void menuAction() {
+    private void menuAction() {
         showOptions();
         int input = readDecision();
         executeOption(input);
@@ -36,18 +35,57 @@ public class Menu {
     }
 
     private void executeOption(int input) {
-        switch (input){
+        switch (input) {
             case 1:
-                System.out.println("Dodawanie filmów");
+                addMovie();
                 break;
             case 2:
-                System.out.println("Wyświetlanie");
+                showMovies();
                 break;
             case 3:
-                System.out.println("Koniec");
-                running = false;
+                end();
                 break;
         }
+    }
+
+    private void addMovie() {
+        Movie movie = readMovieData();
+        save(movie);
+    }
+
+    private Movie readMovieData() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Podaj tytuł:");
+        String title = scanner.nextLine();
+        System.out.print("Podaj rok premiery:");
+        int premiereYear = scanner.nextInt();
+        if(premiereYear<1800 || premiereYear>2100){
+            System.out.println("Podano nierealną datę premiery. " +
+                    "Powinien być przedział: 1800 - 2100");
+            return readMovieData();
+        }
+//        scanner = new Scanner(System.in);
+        scanner.nextLine();
+        System.out.print("Podaj gatunek:");
+        String genre = scanner.nextLine();
+        System.out.print("Podaj ocenę (1-5):");
+        int rate = scanner.nextInt();
+        return new Movie(title, premiereYear, genre, rate);
+    }
+
+    private void showMovies() {
+        for (Movie movie : movies) {
+            System.out.println(movie);
+        }
+    }
+
+    public void save(Movie movie) {
+        movies.add(movie);
+    }
+
+    private void end() {
+        System.out.println("Koniec");
+        running = false;
     }
 
 
