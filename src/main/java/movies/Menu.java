@@ -22,6 +22,9 @@ public class Menu {
             rate int
             );""";
 
+    private static final String INSERT_MOVIE_SQL = "INSERT INTO movies VALUES (0,?,?,?,?);";
+    private static final String SELECT_ALL_MOVIES_SQL = "SELECT * FROM movies;";
+
     public Menu() {
         try {
             initConnection();
@@ -67,25 +70,25 @@ public class Menu {
     }
 
     private void executeOption(int input) { //TODO ROZDZIELIĆ NA 2 METODY
-       try {
-           switch (input) {
-               case 1:
-                   addMovie();
-                   break;
-               case 2:
-                   showMovies();
-                   break;
-               case 3:
-                   end();
-                   break;
-           }
-       }catch (SQLException e){
-           System.out.println("Błąd zapytania do BD");
-       }
+        try {
+            switch (input) {
+                case 1:
+                    addMovie();
+                    break;
+                case 2:
+                    showMovies();
+                    break;
+                case 3:
+                    end();
+                    break;
+            }
+        } catch (SQLException e) {
+            System.out.println("Błąd zapytania do BD");
+        }
 
     }
 
-    private void addMovie() throws SQLException{
+    private void addMovie() throws SQLException {
         Movie movie = readMovieData();
         save(movie);
     }
@@ -110,15 +113,27 @@ public class Menu {
         return new Movie(title, premiereYear, genre, rate);
     }
 
-    private void showMovies() {
-//        for (Movie movie : movies) {
-//            System.out.println(movie);
-//        }
+    private void showMovies() throws SQLException {
+        List<Movie> movies = new ArrayList<>();
+        PreparedStatement statement = connection.prepareStatement(SELECT_ALL_MOVIES_SQL);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            int id = resultSet.getInt(1);
+            String title = resultSet.getString(2);
+            int year = resultSet.getInt(3);
+            String genre = resultSet.getString(4);
+            int rate = resultSet.getInt(5);
+            Movie movie = new Movie(id, title, year, genre, rate);
+            movies.add(movie);
+        }
+
+        for (Movie movie : movies) {
+            System.out.println(movie);
+        }
     }
 
     private void save(Movie movie) throws SQLException {
-        String sql = "INSERT INTO movies VALUES (0,?,?,?,?);";
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = connection.prepareStatement(INSERT_MOVIE_SQL);
         statement.setString(1, movie.getTitle());
         statement.setInt(2, movie.getPremiereYear());
         statement.setString(3, movie.getGenre());
