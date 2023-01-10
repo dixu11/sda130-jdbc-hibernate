@@ -43,12 +43,19 @@ public class Main {
                 book.getTitle(), book.getAuthor(), book.getPages());
 
         System.out.println(insertBookSql);
-        statement.execute(insertBookSql);
+        //statement.execute(insertBookSql);
 
        /* żeby nie trzeba było podawać ID można taką składnię:
         "INSERT INTO books(title, author, pages) VALUES ('%s','%s',%d);"*/
 
+        //update:
+        String updateBook = """
+                UPDATE books
+                SET author='Philip K. Dick'
+                WHERE title='Ubik';
+                """;
 
+        statement.execute(updateBook);
 
     }
 }
