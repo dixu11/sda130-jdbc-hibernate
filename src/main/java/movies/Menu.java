@@ -3,6 +3,7 @@ package movies;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,13 +14,36 @@ public class Menu {
     private List<Movie> movies = new ArrayList<>();
     private Connection connection;
 
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/movies";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "MyPassword123";
+    private static final String CREATE_MOVIES_TABLE_SQL = """
+            CREATE TABLE IF NOT EXISTS movies (
+            id int AUTO_INCREMENT PRIMARY KEY,
+            title varchar(255) NOT NULL,
+            premiere_year int NOT NULL,
+            genre varchar(255) NOT NULL,
+            rate int
+            );""";
+
     public Menu() {
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/movies","root","MyPassword123");
+            initConnection();
+            initTable();
         } catch (SQLException e) {
             System.out.println("Wysypała się baza danych :(");
         }
     }
+
+    private void initConnection() throws SQLException {
+        connection = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+    }
+
+    private void initTable() throws SQLException {
+        Statement statement = connection.createStatement();
+        statement.execute(CREATE_MOVIES_TABLE_SQL);
+    }
+
 
     public void startMenu() {
         do {
@@ -71,7 +95,7 @@ public class Menu {
         String title = scanner.nextLine();
         System.out.print("Podaj rok premiery:");
         int premiereYear = scanner.nextInt();
-        if(premiereYear<1800 || premiereYear>2100){
+        if (premiereYear < 1800 || premiereYear > 2100) {
             System.out.println("Podano nierealną datę premiery. " +
                     "Powinien być przedział: 1800 - 2100");
             return readMovieData();
