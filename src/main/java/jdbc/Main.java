@@ -3,15 +3,26 @@ package jdbc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Main {
-    public static void main(String[] args) throws SQLException{
+    public static void main(String[] args) throws SQLException{ //Obsługa wyjątku!
+        //Pamiętać o Sterowniku - pom
+        //Trzeba najpierw przez SQL zrobić bazę
         //create database books;
+
+        //Nawiązanie połączenia: (tylko raz)
+
         //Wersja dla MySql
-     //   DriverManager.getConnection("jdbc:mysql://localhost:3306/books","root","TUTAJ HASLO");
-      Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/testdb",
-                "postgres", "MyPassword123");
-      //tabela na ksiazki:
+       Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books","root","MyPassword123");
+
+        //Wersja dla Postgresql
+     // Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/testdb",
+       //         "postgres", "MyPassword123");
+
+
+
+      //Stworzenie tabeli:
         String createTableSql = """
                 CREATE TABLE books (
                 id int AUTO_INCREMENT PRIMARY KEY,
@@ -21,15 +32,22 @@ public class Main {
                 );
                 """;
 
-        connection.createStatement().execute(createTableSql);
-
-        // "jdbc:mysql://localhost:3306/sonoo","root","root"
+        // connection.createStatement().execute(createTableSql);
 
 
-        /*Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/testdb",
-                "postgres", "MyPassword123");
+        //Dodanie książki:
+        Book book = new Book("Ubik", "Philip Dick", 250);
+        Statement statement = connection.createStatement();
+        //formatowany String - patrz reminder
+        String insertBookSql = String.format(" INSERT INTO books VALUES (0,'%s','%s',%d);",
+                book.getTitle(), book.getAuthor(), book.getPages());
 
-        connection.createStatement().execute("create table test(num int);");*/
+        System.out.println(insertBookSql);
+        statement.execute(insertBookSql);
+
+       /* żeby nie trzeba było podawać ID można taką składnię:
+        "INSERT INTO books(title, author, pages) VALUES ('%s','%s',%d);"*/
+
 
 
     }
