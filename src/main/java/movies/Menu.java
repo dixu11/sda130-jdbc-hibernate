@@ -1,9 +1,6 @@
 package movies;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,7 +8,6 @@ import java.util.Scanner;
 //menu
 public class Menu {
     private boolean running = true;
-    private List<Movie> movies = new ArrayList<>();
     private Connection connection;
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/movies";
@@ -40,8 +36,8 @@ public class Menu {
     }
 
     private void initTable() throws SQLException {
-        Statement statement = connection.createStatement();
-        statement.execute(CREATE_MOVIES_TABLE_SQL);
+        PreparedStatement statement = connection.prepareStatement(CREATE_MOVIES_TABLE_SQL);
+        statement.execute();
     }
 
 
@@ -70,21 +66,26 @@ public class Menu {
         return scanner.nextInt();
     }
 
-    private void executeOption(int input) {
-        switch (input) {
-            case 1:
-                addMovie();
-                break;
-            case 2:
-                showMovies();
-                break;
-            case 3:
-                end();
-                break;
-        }
+    private void executeOption(int input) { //TODO ROZDZIELIĆ NA 2 METODY
+       try {
+           switch (input) {
+               case 1:
+                   addMovie();
+                   break;
+               case 2:
+                   showMovies();
+                   break;
+               case 3:
+                   end();
+                   break;
+           }
+       }catch (SQLException e){
+           System.out.println("Błąd zapytania do BD");
+       }
+
     }
 
-    private void addMovie() {
+    private void addMovie() throws SQLException{
         Movie movie = readMovieData();
         save(movie);
     }
@@ -110,13 +111,19 @@ public class Menu {
     }
 
     private void showMovies() {
-        for (Movie movie : movies) {
-            System.out.println(movie);
-        }
+//        for (Movie movie : movies) {
+//            System.out.println(movie);
+//        }
     }
 
-    private void save(Movie movie) {
-        movies.add(movie);
+    private void save(Movie movie) throws SQLException {
+        String sql = "INSERT INTO movies VALUES (0,?,?,?,?);";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, movie.getTitle());
+        statement.setInt(2, movie.getPremiereYear());
+        statement.setString(3, movie.getGenre());
+        statement.setInt(4, movie.getRate());
+        statement.execute();
     }
 
     private void end() {
