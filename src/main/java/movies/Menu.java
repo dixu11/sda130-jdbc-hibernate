@@ -9,7 +9,6 @@ import java.util.Scanner;
 public class Menu {
     private boolean running = true;
     private Connection connection;
-
     private static final String DB_URL = "jdbc:mysql://localhost:3306/movies";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "MyPassword123";
@@ -53,7 +52,7 @@ public class Menu {
     private void menuAction() {
         showOptions();
         int input = readDecision();
-        executeOption(input);
+        handleOption(input);
     }
 
     private void showOptions() {
@@ -69,23 +68,27 @@ public class Menu {
         return scanner.nextInt();
     }
 
-    private void executeOption(int input) { //TODO ROZDZIELIĆ NA 2 METODY
+    private void handleOption(int input) {
         try {
-            switch (input) {
-                case 1:
-                    addMovie();
-                    break;
-                case 2:
-                    showMovies();
-                    break;
-                case 3:
-                    end();
-                    break;
-            }
+           executeOption(input);
         } catch (SQLException e) {
             System.out.println("Błąd zapytania do BD");
         }
 
+    }
+
+    private void executeOption(int input) throws SQLException{
+        switch (input) {
+            case 1:
+                addMovie();
+                break;
+            case 2:
+                showMovies();
+                break;
+            case 3:
+                end();
+                break;
+        }
     }
 
     private void addMovie() throws SQLException {
@@ -113,6 +116,15 @@ public class Menu {
         return new Movie(title, premiereYear, genre, rate);
     }
 
+    private void save(Movie movie) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(INSERT_MOVIE_SQL);
+        statement.setString(1, movie.getTitle());
+        statement.setInt(2, movie.getPremiereYear());
+        statement.setString(3, movie.getGenre());
+        statement.setInt(4, movie.getRate());
+        statement.execute();
+    }
+
     private void showMovies() throws SQLException {
         List<Movie> movies = new ArrayList<>();
         PreparedStatement statement = connection.prepareStatement(SELECT_ALL_MOVIES_SQL);
@@ -132,18 +144,10 @@ public class Menu {
         }
     }
 
-    private void save(Movie movie) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(INSERT_MOVIE_SQL);
-        statement.setString(1, movie.getTitle());
-        statement.setInt(2, movie.getPremiereYear());
-        statement.setString(3, movie.getGenre());
-        statement.setInt(4, movie.getRate());
-        statement.execute();
-    }
-
-    private void end() {
+    private void end() throws SQLException {
         System.out.println("Koniec");
         running = false;
+        connection.close();
     }
 
 
