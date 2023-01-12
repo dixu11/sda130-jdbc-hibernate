@@ -1,5 +1,6 @@
 package movies.controller;
 
+import movies.exception.MovieServiceException;
 import movies.model.Movie;
 import movies.service.MovieService;
 
@@ -32,10 +33,12 @@ public abstract class Controller {
             executeOption(input);
         } catch (SQLException e) {
             showMessage("Błąd zapytania do BD");
+        }catch (MovieServiceException e){
+            System.out.println(e.getMessage());
         }
     }
 
-    private void executeOption(int input) throws SQLException {
+    private void executeOption(int input) throws SQLException, MovieServiceException {
         switch (input) {
             case 1:
                 addMovie();
@@ -49,7 +52,7 @@ public abstract class Controller {
         }
     }
 
-    private void addMovie() throws SQLException {
+    private void addMovie() throws SQLException, MovieServiceException {
         Movie movie = readMovieData();
         movieService.save(movie);
     }
@@ -62,11 +65,6 @@ public abstract class Controller {
     private Movie readMovieData() {
         String title = readString("Podaj tytuł:");
         int premiereYear = readInt("Podaj rok premiery:");
-        if (premiereYear < 1800 || premiereYear > 2100) {
-            showMessage("Podano nierealną datę premiery. " +
-                    "Powinien być przedział: 1800 - 2100");
-            return readMovieData();
-        }
         String genre = readString("Podaj gatunek:");
         int rate = readInt("Podaj ocenę (1-5):");
         return new Movie(title, premiereYear, genre, rate);
