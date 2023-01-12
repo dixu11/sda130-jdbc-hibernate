@@ -87,6 +87,7 @@ public class Main {
         preparedStatement.setString(2, "Robert Martin");
         preparedStatement.setInt(3, 350);
         preparedStatement.execute();
+       // preparedStatement.executeUpdate();
 
 
     }
