@@ -3,6 +3,7 @@ package hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 public class HibernateDemo {
@@ -18,14 +19,22 @@ public class HibernateDemo {
         //ORM - Object-Relation Mapper
         Book book = new Book("DDD Kompedium wiedzy","Vaughn Vernon", 130);
 
+        //przygotowanie interakcji z bazą
         Session session = sessionFactory.openSession();
+       Transaction transaction = session.beginTransaction();
+       //nasze interakcje
         session.save(book);
+        //zakończenie interakcji
+        transaction.commit();
+        session.close();
+
+
 
         //Aby klasa była encją bazodanową, rozumianą przez hibernate musi:
         //być oznaczona adnotacją @Entity
         //mysi być wskazana przy konfiguracji (addAnnotatedClass)
         //musi być wskazane id adnotacją @Id
-        //oraz....
+        //musi mieć bezparametrowy konstruktor
 
 
 

@@ -1,14 +1,22 @@
 package hibernate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "books") //poprawa nazwy tabeli
+                        //inaczej używa 'book'
 public class Book {
    @Id
+   @Column(name = "id")
     private int id;
+    @Column(name = "title")
     private String title;
+    @Column(name = "author")
     private String author;
+    @Column(name = "pages")
     private  int pages;
 
     public Book(String title, String author, int pages) {
@@ -23,6 +31,11 @@ public class Book {
         this.author = author;
         this.pages = pages;
     }
+
+    Book() { //wymagany przez hibernate bezparametrowy konstruktor
+
+    }
+
 
     public String getTitle() {
         return title;
