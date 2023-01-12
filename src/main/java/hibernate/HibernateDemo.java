@@ -33,7 +33,7 @@ public class HibernateDemo {
         Session session = sessionFactory.openSession();
        Transaction transaction = session.beginTransaction();
        //nasze interakcje
-       // session.save(book);
+        session.save(book);
         //zakończenie interakcji
         transaction.commit();
         session.close();
@@ -58,7 +58,7 @@ public class HibernateDemo {
         session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         Book book2 = session.get(Book.class, 5);
-        //session.delete(book2);
+        session.delete(book2);
         transaction.commit();
         session.close();
 
