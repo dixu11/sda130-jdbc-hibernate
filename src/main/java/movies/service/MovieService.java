@@ -11,8 +11,6 @@ import java.util.List;
 public class MovieService {
     private JDBCMoviesRepository repository = new JDBCMoviesRepository();
 
-
-
     public void save(Movie movie) throws SQLException,MovieServiceException {
         if (movie.getPremiereYear() < 1800 || movie.getPremiereYear() > 2100) {
             throw new MovieServiceException("Podano nierealną datę premiery. " +

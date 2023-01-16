@@ -36,6 +36,7 @@ public class HibernateDemo {
         session.save(book);
         //zakończenie interakcji
         transaction.commit();
+       // session.flush();
         session.close();
 
         //cRud:
