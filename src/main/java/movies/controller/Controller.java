@@ -10,7 +10,12 @@ import java.util.List;
 
 public abstract class Controller {
     private boolean running = true;
-    private MovieService movieService = new MovieService();  //tylko jeden service na kontroler!
+    private MovieService movieService;
+
+    public Controller(MovieService movieService) {
+        this.movieService = movieService;
+    }
+
     private static final String OPTIONS = """
             Wybierz jedną z opcji:
             1. Dodaj nowy film
@@ -31,14 +36,12 @@ public abstract class Controller {
     private void handleOption(int input) {
         try {
             executeOption(input);
-        } catch (SQLException e) {
-            showMessage("Błąd zapytania do BD");
-        }catch (MovieServiceException e){
+        } catch (MovieServiceException e){
             System.out.println(e.getMessage());
         }
     }
 
-    private void executeOption(int input) throws SQLException, MovieServiceException {
+    private void executeOption(int input) throws MovieServiceException {
         switch (input) {
             case 1:
                 addMovie();
@@ -52,12 +55,12 @@ public abstract class Controller {
         }
     }
 
-    private void addMovie() throws SQLException, MovieServiceException {
+    private void addMovie() throws MovieServiceException {
         Movie movie = readMovieData();
         movieService.save(movie);
     }
 
-    private void showMovies() throws SQLException {
+    private void showMovies() throws MovieServiceException {
         List<Movie> movies = movieService.findAllMovies();
         showMovies(movies);
     }
@@ -78,7 +81,7 @@ public abstract class Controller {
         showMessage(allFilms);
     }
 
-    private void end() throws SQLException {
+    private void end() throws MovieServiceException {
         showMessage("Koniec");
         running = false;
         movieService.closeAllResources();

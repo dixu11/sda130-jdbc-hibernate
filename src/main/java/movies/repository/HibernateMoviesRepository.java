@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class HibernateMoviesRepository {
+public class HibernateMoviesRepository implements MovieRepository {
 
     private SessionFactory sessionFactory;
 
@@ -43,12 +43,18 @@ public class HibernateMoviesRepository {
     }
 
     public void update(int id, int correctYear) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Transaction transaction = currentSession.beginTransaction();
-        Movie movie = currentSession.get(Movie.class, id);
-        movie.setYear(correctYear);
-        transaction.commit();
-        currentSession.close();
+        Transaction transaction = null;
+        try(Session session = sessionFactory.getCurrentSession()) {
+            transaction = session.beginTransaction();
+            Movie movie = session.get(Movie.class, id);
+            movie.setYear(correctYear);
+            transaction.commit();
+        }catch (HibernateException e){
+            e.printStackTrace();
+            if(transaction!=null){
+                transaction.rollback();
+            }
+        }
     }
 
     public List<Movie> findAllMovies()  {
@@ -67,22 +73,12 @@ public class HibernateMoviesRepository {
         }
     }
 
-    public void closeAllResources()  {
-        sessionFactory.close();
-    }
 
-
-
-
-
-
-
-
-   /* private <T> T execute(Function<Session,T> operation){
+    private <T> T executeOperation(Function<Session,T> operation){
         Transaction transaction = null;
         try(Session session = sessionFactory.getCurrentSession()) {
             transaction = session.beginTransaction();
-            T result = operation.apply(session);
+          T result = operation.apply(session);
             transaction.commit();
             return result;
         }catch (HibernateException e){
@@ -94,20 +90,23 @@ public class HibernateMoviesRepository {
         }
     }
 
-    public List<Movie> findAllMovies2() {
-        List<Movie> movies = execute(session -> session.createQuery("FROM Movie", Movie.class).getResultList());
-        return movies != null ? movies : Collections.emptyList();
+    public void saveMovie2(Movie movie){
+        executeOperation( session -> session.save(movie) );
     }
 
-    public void addMovie2(Movie movie) {
-        execute(session -> session.save(movie));
-    }
-
-    public void update2(int id, int correctYear){
-        execute(session -> {
+    public void update2 (int id, int year){
+        executeOperation(session -> {
             Movie movie = session.get(Movie.class, id);
-            movie.setYear(correctYear);
+            movie.setYear(year);
             return null;
         });
-    }*/
+    }
+
+    public List<Movie> findAllMovies2(){
+       return executeOperation(session -> session.createQuery("FROM Movie",Movie.class).getResultList());
+    }
+
+    public void closeAllResources()  {
+        sessionFactory.close();
+    }
 }
