@@ -1,5 +1,7 @@
 package hibernate;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,7 @@ public class CourseDetails {
     @Column(name = "full_description")
     private String fullDescription;
     @OneToOne(mappedBy = "courseDetails")
+    @Cascade({org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.DETACH, org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.REFRESH})
     private Course course;
 
     CourseDetails() {
