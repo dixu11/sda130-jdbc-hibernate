@@ -1,23 +1,21 @@
 package hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "course_details")
 public class CourseDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "full_description")
     private String fullDescription;
 
     private CourseDetails() {
     }
 
-    public CourseDetails(int id, String fullDescription) {
-        this.id = id;
+    public CourseDetails(String fullDescription) {
         this.fullDescription = fullDescription;
     }
 

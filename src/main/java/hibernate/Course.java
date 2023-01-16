@@ -1,16 +1,17 @@
 package hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "courses")
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    @OneToOne
+    @JoinColumn(name = "course_details_id") //update problem!
+    private CourseDetails courseDetails;
 
     private Course() {
     }
@@ -23,6 +24,10 @@ public class Course {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setCourseDetails(CourseDetails courseDetails) {
+        this.courseDetails = courseDetails;
     }
 
     @Override

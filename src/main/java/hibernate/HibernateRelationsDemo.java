@@ -19,8 +19,11 @@ public class HibernateRelationsDemo {
         Transaction transaction = null;
         try (Session session = sessionFactory.getCurrentSession()) {
             transaction = session.beginTransaction();
-            Course course = new Course("Java od podstaw");
-            session.save(course);
+//            Course course = new Course("Java od podstaw");
+            Course course = session.get(Course.class, 1L);
+            CourseDetails courseDetails = new CourseDetails("Pełny opis kursu Java od Podstaw....");
+            course.setCourseDetails(courseDetails);
+
             transaction.commit();
         } catch (HibernateException e) {
             e.printStackTrace();
@@ -28,5 +31,7 @@ public class HibernateRelationsDemo {
                 transaction.rollback();
             }
         }
+
+        sessionFactory.close();
     }
 }
