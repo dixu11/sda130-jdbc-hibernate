@@ -1,6 +1,10 @@
 package hibernate;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
+
 
 @Entity
 @Table(name = "courses")
@@ -9,8 +13,9 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_details_id") //update problem!
+    @Cascade(CascadeType.ALL)
     private CourseDetails courseDetails;
 
     private Course() {
@@ -18,6 +23,11 @@ public class Course {
 
     public Course(String name) {
         this.name = name;
+    }
+
+    public Course( String name, CourseDetails courseDetails) {
+        this.name = name;
+        this.courseDetails = courseDetails;
     }
 
     //no getters and setters?
@@ -36,5 +46,9 @@ public class Course {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public CourseDetails getDetails() {
+        return courseDetails;
     }
 }

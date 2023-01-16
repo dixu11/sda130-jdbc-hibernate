@@ -19,11 +19,17 @@ public class HibernateRelationsDemo {
         Transaction transaction = null;
         try (Session session = sessionFactory.getCurrentSession()) {
             transaction = session.beginTransaction();
+            Course course2 = new Course("d", new CourseDetails("c details"));
 //            Course course = new Course("Java od podstaw");
-            Course course = session.get(Course.class, 1L);
-            CourseDetails courseDetails = new CourseDetails("Pełny opis kursu Java od Podstaw....");
-            course.setCourseDetails(courseDetails);
-
+          //  Course course = session.get(Course.class, 2L);
+        //    System.out.println("course");
+         //   System.out.println(course.getDetails());
+//            CourseDetails courseDetails = new CourseDetails("Pełny opis kursu Java od Podstaw....");
+//            course.setCourseDetails(courseDetails);
+//            session.persist(course2);
+         //   session.delete(course);
+            session.save(course2);
+            System.out.println("del");
             transaction.commit();
         } catch (HibernateException e) {
             e.printStackTrace();

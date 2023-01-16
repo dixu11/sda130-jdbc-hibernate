@@ -11,12 +11,18 @@ public class CourseDetails {
     private int id;
     @Column(name = "full_description")
     private String fullDescription;
+    @OneToOne(mappedBy = "courseDetails")
+    private Course course;
 
-    private CourseDetails() {
+    CourseDetails() {
     }
 
     public CourseDetails(String fullDescription) {
         this.fullDescription = fullDescription;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     @Override
