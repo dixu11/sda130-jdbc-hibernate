@@ -60,4 +60,8 @@ public class Movie {
                 ", rate=" + rate +
                 '}';
     }
+
+    public void setYear(int year) {
+        premiereYear = year;
+    }
 }
