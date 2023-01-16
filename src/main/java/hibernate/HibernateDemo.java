@@ -9,7 +9,7 @@ import org.hibernate.cfg.Configuration;
 import java.util.List;
 
 public class HibernateDemo {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(Book.class);
@@ -19,7 +19,7 @@ public class HibernateDemo {
         //SessionFactory - ciężki obiekt, potrzebny tylko jeden na całą aplikację
 
         //ORM - Object-Relation Mapper
-        Book book = new Book("DDD Kompedium wiedzy - ","Vaughn Vernon", 130);
+        Book book = new Book("aaa","Vaughn Vernon", 130);
 
         //Aby klasa była encją bazodanową, rozumianą przez hibernate musi:
         //być oznaczona adnotacją @Entity
@@ -30,17 +30,25 @@ public class HibernateDemo {
 
         //Crud:
         //przygotowanie interakcji z bazą
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
        Transaction transaction = session.beginTransaction();
        //nasze interakcje
         session.save(book);
         //zakończenie interakcji
         transaction.commit();
-        session.close();
+      // session.close();
+       /*
+       * orce this session to flush. Must be called at the end of a unit of work, before committing the transaction and closing the session (depending on setFlushMode(FlushMode), Transaction.commit() calls this method).
 
-        //cRud:
+Flushing is the process of synchronizing the underlying persistent store with persistable state held in memory.
+Throws:
+HibernateException – Indicates problems flushing the session or talking to the database.
+       *
+       * */
+
+      /*  //cRud:
         session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
+       transaction = session.beginTransaction();
        Book aBook = session.get(Book.class,3 ); //jeśli nie znajdzie to null
         System.out.println(aBook);
         transaction.commit();
@@ -58,7 +66,7 @@ public class HibernateDemo {
         session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         Book book2 = session.get(Book.class, 5);
-        session.delete(book2);
+       // session.delete(book2);
         transaction.commit();
         session.close();
 
@@ -72,10 +80,10 @@ public class HibernateDemo {
         System.out.println(books);
 
         sessionFactory.close();
-        //należy zamknąc SessionFactory na koniec
+        //należy zamknąc SessionFactory na koniec*/
 
 
-
+        Thread.sleep(1000);
 
     }
 }
