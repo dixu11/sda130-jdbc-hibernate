@@ -13,13 +13,14 @@ public class HibernateRelationsDemo {
                 .configure()
                 .addAnnotatedClass(Course.class)
                 .addAnnotatedClass(CourseDetails.class)
+                .addAnnotatedClass(Instructor.class)
                 .buildSessionFactory();
 
 
         Transaction transaction = null;
         try (Session session = sessionFactory.getCurrentSession()) {
             transaction = session.beginTransaction();
-            Course course2 = new Course("d", new CourseDetails("c details"));
+//            Course course2 = new Course("zz", new CourseDetails("c details"));
 //            Course course = new Course("Java od podstaw");
           //  Course course = session.get(Course.class, 2L);
         //    System.out.println("course");
@@ -28,7 +29,8 @@ public class HibernateRelationsDemo {
 //            course.setCourseDetails(courseDetails);
 //            session.persist(course2);
          //   session.delete(course);
-            session.save(course2);
+
+//            session.persist(course2);
             System.out.println("del");
             transaction.commit();
         } catch (HibernateException e) {

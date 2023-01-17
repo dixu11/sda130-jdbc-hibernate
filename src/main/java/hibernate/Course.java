@@ -15,8 +15,12 @@ public class Course {
     private String name;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_details_id") //update problem!
-    @Cascade(CascadeType.ALL)
+    @Cascade(CascadeType.SAVE_UPDATE)
     private CourseDetails courseDetails;
+
+    @ManyToOne
+    @JoinColumn(name = "instructor_id")
+    private Instructor instructor;
 
     private Course() {
     }
@@ -38,6 +42,31 @@ public class Course {
 
     public void setCourseDetails(CourseDetails courseDetails) {
         this.courseDetails = courseDetails;
+    }
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public CourseDetails getCourseDetails() {
+        return courseDetails;
+    }
+
+    public Instructor getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
     }
 
     @Override
