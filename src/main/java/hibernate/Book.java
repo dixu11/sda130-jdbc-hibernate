@@ -1,11 +1,14 @@
 package hibernate;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "books") //poprawa nazwy tabeli
                         //inaczej używa 'book'
-public class Book {
+final public class Book {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
@@ -16,6 +19,11 @@ public class Book {
     private String author;
     @Column(name = "pages")
     private  int pages;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @Cascade(CascadeType.ALL)
+    @JoinColumn(name = "book_blurb_id")
+    private BookBlurb bookBlurb;
 
     public Book(String title, String author, int pages) {
         this.title = title;
@@ -30,10 +38,13 @@ public class Book {
         this.pages = pages;
     }
 
-    Book() { //wymagany przez hibernate bezparametrowy konstruktor
+   Book() { //wymagany przez hibernate bezparametrowy konstruktor
 
     }
 
+    public BookBlurb getBookBlurb() {
+        return bookBlurb;
+    }
 
     public String getTitle() {
         return title;
@@ -49,6 +60,10 @@ public class Book {
 
     public void setPages(int pages) {
         this.pages = pages;
+    }
+
+    public void setBookBlurb(BookBlurb bookBlurb) {
+        this.bookBlurb = bookBlurb;
     }
 
     @Override

@@ -39,7 +39,6 @@ public class MoviesApp {
 
 
     private static void executeProgram(String controllerMode, String repositoryMode) throws MovieServiceException {
-
         MovieService service = new MovieService(createRepository(repositoryMode));
         Controller controller;
         if (controllerMode.equalsIgnoreCase(CONSOLE_MODE)) {
