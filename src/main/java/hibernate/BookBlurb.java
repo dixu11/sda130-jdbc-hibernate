@@ -10,6 +10,9 @@ final public class BookBlurb {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String text;
+    @OneToOne(fetch = FetchType.LAZY,mappedBy = "bookBlurb") //mappedBy - to pole powie Ci gdzie znajduja sie te dane
+    @JoinColumn(name = "book_id")
+    private Book book;
 
     public BookBlurb(String text) {
         this.text = text;
@@ -28,5 +31,9 @@ final public class BookBlurb {
                 "id=" + id +
                 ", text='" + text + '\'' +
                 '}';
+    }
+
+    public Book getBook() {
+        return book;
     }
 }

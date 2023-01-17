@@ -5,8 +5,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-public class HibernateOperationOnPersist {
-    public static void main(String[] args) throws InterruptedException {
+public class FindBookByBlurbId {
+    public static void main(String[] args) {
         SessionFactory factory = new Configuration()
                 .configure()
                 .addAnnotatedClass(Book.class)
@@ -16,15 +16,11 @@ public class HibernateOperationOnPersist {
 
         Session session = factory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
-        Book book = session.get(Book.class, 1); // uwaga jeśli nie ma książki o id = 1!
-        //System.out.println(book.getPages());
-     //   book.setPages(1000);
-      //  Thread.sleep(4000);
-     //   System.out.println(book.getBookBlurb());
-     //   book.getBookBlurb().setText("yyy");
+        BookBlurb blurb = session.get(BookBlurb.class, 1L);
+        System.out.println(blurb.getBook());
         transaction.commit();
         session.close();
         factory.close();
-        System.out.println(book.getBookBlurb());
+
     }
 }

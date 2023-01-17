@@ -16,8 +16,8 @@ public class HibernateRelationsDelete {
 
         Session session = factory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
-        session.delete(session.get(Book.class,1));
-        session.delete(session.get(Book.class,2));
+        session.delete(session.get(Book.class,1)); //to było potrzebne żeby pokasować te książki i zademonstrować kaskadowość
+        session.delete(session.get(Book.class,2)); //mało wydajny sposób
         session.delete(session.get(Book.class,4));
         session.delete(session.get(Book.class,5));
         session.delete(session.get(Book.class,6));
