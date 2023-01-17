@@ -25,6 +25,10 @@ final public class Book {
     @JoinColumn(name = "book_blurb_id")
     private BookBlurb bookBlurb;
 
+    @ManyToOne
+    @JoinColumn(name = "library_id")
+    private Library library;
+
     public Book(String title, String author, int pages) {
         this.title = title;
         this.author = author;
@@ -64,6 +68,10 @@ final public class Book {
 
     public void setBookBlurb(BookBlurb bookBlurb) {
         this.bookBlurb = bookBlurb;
+    }
+
+    public void setLibrary(Library library) {
+        this.library = library;
     }
 
     @Override

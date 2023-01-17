@@ -12,6 +12,7 @@ public class HibernateRelationsDemo {
                 .configure()
                 .addAnnotatedClass(Book.class)
                 .addAnnotatedClass(BookBlurb.class)
+                .addAnnotatedClass(Library.class)
                 .buildSessionFactory();
         //Transcient
         Book book = new Book("Inaczej", "Radek Kotarski",400);
