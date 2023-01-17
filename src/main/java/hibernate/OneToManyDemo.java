@@ -12,6 +12,7 @@ public class OneToManyDemo {
                 .addAnnotatedClass(Book.class)
                 .addAnnotatedClass(BookBlurb.class)
                 .addAnnotatedClass(Library.class)
+                .addAnnotatedClass(BookReader.class)
                 .buildSessionFactory();
 
 
